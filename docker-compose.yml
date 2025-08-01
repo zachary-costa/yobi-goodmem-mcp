@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  goodmem-mcp:
+    build: .
+    container_name: goodmem-mcp-server
+    environment:
+      - GOODMEM_API_URL=${GOODMEM_API_URL:-http://goodmem:8080}
+      - GOODMEM_API_KEY=${GOODMEM_API_KEY}
+      - GOODMEM_DEFAULT_SPACE=${GOODMEM_DEFAULT_SPACE:-default}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    networks:
+      - goodmem-network
+    restart: unless-stopped
+    # For development, mount the source code
+    # volumes:
+    #   - ./dist:/app/dist
+    #   - ./src:/app/src
+
+# If Goodmem is running in Docker on the same host
+networks:
+  goodmem-network:
+    external: true
+    name: goodmem_default  # Adjust to match your Goodmem network
+
+# Or create a new network
+# networks:
+#   goodmem-network:
+#     driver: bridge

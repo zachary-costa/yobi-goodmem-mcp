@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "goodmem": {
+      "command": "node",
+      "args": [
+        "/path/to/goodmem-mcp-server/dist/index.js"
+      ],
+      "env": {
+        "GOODMEM_API_URL": "http://localhost:8080",
+        "GOODMEM_API_KEY": "your-api-key-here",
+        "GOODMEM_DEFAULT_SPACE": "default",
+        "LOG_LEVEL": "info"
+      }
+    }
+  }
+}
