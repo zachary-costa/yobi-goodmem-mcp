@@ -10,12 +10,11 @@ cd /home/yobi-goodmem-mcp
 
 # 2. Create .env file with your credentials
 cat > .env << EOF
-GOODMEM_API_URL=http://host.docker.internal:8081
 GOODMEM_API_KEY=gm_di7zgw3vuvpq7zp2jm6jgwini4
 GOODMEM_DEFAULT_SPACE=default
 EOF
 
-# Note: host.docker.internal allows the container to access localhost:8081
+# Note: GOODMEM_API_URL is auto-configured to use http://goodmem-server:8080
 
 # 3. Build and start the container
 docker-compose up -d
