@@ -5,25 +5,21 @@ services:
     build: .
     container_name: goodmem-mcp-server
     environment:
-      - GOODMEM_API_URL=${GOODMEM_API_URL:-http://goodmem:8080}
+      # Since both containers are on same host, use the container name
+      - GOODMEM_API_URL=http://goodmem-server:8080
       - GOODMEM_API_KEY=${GOODMEM_API_KEY}
       - GOODMEM_DEFAULT_SPACE=${GOODMEM_DEFAULT_SPACE:-default}
       - LOG_LEVEL=${LOG_LEVEL:-info}
     networks:
       - goodmem-network
     restart: unless-stopped
-    # For development, mount the source code
-    # volumes:
-    #   - ./dist:/app/dist
-    #   - ./src:/app/src
+    stdin_open: true
+    tty: true
+    # MCP uses stdio, so we need to keep the container running
+    command: node dist/index.js
 
-# If Goodmem is running in Docker on the same host
+# Connect to the existing Goodmem network
 networks:
   goodmem-network:
     external: true
-    name: goodmem_default  # Adjust to match your Goodmem network
-
-# Or create a new network
-# networks:
-#   goodmem-network:
-#     driver: bridge
+    name: bridge  # Docker's default bridge network
