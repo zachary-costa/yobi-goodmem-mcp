@@ -20,11 +20,7 @@ export interface Space {
   updatedAt?: string;
 }
 
-export interface MemoryCreationRequest {
-  content: string;
-  metadata?: Record<string, any>;
-  spaceId: string;
-}
+// MemoryCreationRequest interface removed - using inline object with originalContent
 
 export interface RetrieveMemoryEvent {
   abstractReply?: {
@@ -106,10 +102,11 @@ export class GoodmemClient {
   // Memories API
   async createMemory(content: string, spaceId: string, metadata?: Record<string, any>): Promise<Memory> {
     try {
-      const payload: MemoryCreationRequest = {
-        content,
+      const payload = {
+        originalContent: content,  // Changed from 'content' to 'originalContent'
         spaceId,
         metadata: metadata || {},
+        contentType: 'text/plain', // Add contentType as required by API
       };
 
       const response = await this.client.post('/v1/memories', payload);
@@ -233,7 +230,7 @@ export class GoodmemClient {
   }
 
   // Batch operations
-  async batchCreateMemories(memories: MemoryCreationRequest[]): Promise<Memory[]> {
+  async batchCreateMemories(memories: Array<{originalContent: string; spaceId: string; metadata?: Record<string, any>; contentType?: string}>): Promise<Memory[]> {
     try {
       const response = await this.client.post('/v1/memories/batch', { memories });
       return response.data.memories || [];
